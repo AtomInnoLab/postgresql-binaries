@@ -209,7 +209,7 @@ jobs:
 
           if [ -z "$version" ]; then
             # Set default version for non-release builds
-            version="17.4.0"
+            version="17.5.0"
           fi
 
           root_directory="$(pwd)"
@@ -229,15 +229,15 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           platform="${{ matrix.platform }}";
-          
+
           docker run --privileged --rm tonistiigi/binfmt --install all
-          
+
           if [[ "${{ matrix.id }}" = *musl* ]]; then
             echo "DOCKERFILE=dockerfiles/Dockerfile.linux-musl" | tee -a $GITHUB_ENV
           else
             echo "DOCKERFILE=dockerfiles/Dockerfile.linux-gnu" | tee -a $GITHUB_ENV
           fi
-          
+
           echo "PLATFORM=$platform" | tee -a $GITHUB_ENV
 
       - name: Build (Linux)
@@ -245,7 +245,7 @@ jobs:
         run: |
           cp $DOCKERFILE Dockerfile
           docker buildx build --build-arg "POSTGRESQL_VERSION=$VERSION" --platform "$PLATFORM" --tag postgresql-build:latest .
-          
+
           docker create --platform "$PLATFORM" --name pgbuild postgresql-build:latest
           docker cp pgbuild:/opt/postgresql $INSTALL_DIRECTORY
           docker rm -f pgbuild
@@ -276,24 +276,27 @@ jobs:
             readline \
             xz \
             zstd
-          
+
           brew_dir="/usr/local"
           if [ "${{ matrix.id }}" == "macos-arm64" ]; then
             brew_dir="/opt/homebrew"
           fi
-          brew_opt_dir="$brew_dir/opt"          
+          brew_opt_dir="$brew_dir/opt"
           ls -l "$brew_opt_dir"
 
+          echo "BREW_OPT_DIR=$brew_opt_dir" | tee -a $GITHUB_ENV
           echo "CPPFLAGS=-I${brew_opt_dir}/icu4c/include -I${brew_opt_dir}/openssl/include" | tee -a $GITHUB_ENV
           echo "LDFLAGS=-L${brew_opt_dir}/icu4c/lib -L${brew_opt_dir}/openssl/lib" | tee -a $GITHUB_ENV
           echo "LLVM_CONFIG=${brew_opt_dir}/llvm/bin/llvm-config" | tee -a $GITHUB_ENV
 
       - name: Build (MacOS)
         if: ${{ startsWith(matrix.id, 'macos-') }}
+        env:
+          BREW_OPT_DIR: ${{env.BREW_OPT_DIR}}
         run: |
           cd "$SOURCE_DIRECTORY"
           major_version=$(echo "$POSTGRESQL_VERSION" | awk -F. '{print $1}')
-          
+
           ./configure $build_directory \
             --prefix "$INSTALL_DIRECTORY" \
             --enable-integer-datetimes \
@@ -317,13 +320,20 @@ jobs:
           make -C contrib install
 
           cp "$SOURCE_DIRECTORY/COPYRIGHT" "$INSTALL_DIRECTORY"
+          cp "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib"
           cd "$ROOT_DIRECTORY"
 
       # This allows the MacOS build to be relocated to a different directory
       - name: Update library paths (MacOS)
         if: ${{ startsWith(matrix.id, 'macos-') }}
+        env:
+          BREW_OPT_DIR: ${{env.BREW_OPT_DIR}}
         run: |
           find $INSTALL_DIRECTORY/bin -type f | xargs -L 1 install_name_tool -change $INSTALL_DIRECTORY/lib/libpq.5.dylib '@executable_path/../lib/libpq.5.dylib'
+          find $INSTALL_DIRECTORY/bin -type f | while read binary; do
+            install_name_tool -change "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
+            install_name_tool -change "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
+          done
 
       #
       # Windows
@@ -385,15 +395,15 @@ jobs:
       - name: Test the binary file cpu architecture
         run: |
           postgres_file="$INSTALL_DIRECTORY/bin/postgres"
-          
+
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             cpu_architecture=$(readelf --file-header "$postgres_file" | grep 'Machine:')
           else
             cpu_architecture=$(file "$postgres_file")
           fi
-          
+
           echo "CPU_ARCHITECTURE=$cpu_architecture" | tee -a $GITHUB_ENV
-          
+
           if [[ "$cpu_architecture" != *"${{ matrix.architecture }}"* ]]; then
             echo "ERROR: CPU architecture ($cpu_architecture) does not match expected architecture (${{ matrix.architecture }})"
             exit 1
@@ -405,7 +415,7 @@ jobs:
           tar xzf "$ARCHIVE.tar.gz" -C "$test_directory"
           cd "$test_directory/$ARCHIVE"
           cp "$ROOT_DIRECTORY/scripts/test.sh" .
-          
+
           if [[ "${{ matrix.id }}" = macos* ]]; then
             echo "Testing MacOS"
             ./test.sh $VERSION
