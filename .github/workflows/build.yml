@@ -204,6 +204,9 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: Setup environment
+        env:
+          P12_BASE64: ${{ secrets.APPLE_DEV_ID_P12_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
         run: |
           version=$(echo "${{ github.ref_name }}" | grep '^[0-9]*.[0-9]*.[0-9]*$') || true
 
@@ -253,6 +256,24 @@ jobs:
       #
       # MacOS Build
       #
+      - name: Import Macos Key (Macos)
+        if: ${{ startsWith(matrix.id, 'macos-') }}
+        env:
+          P12_BASE64: ${{ secrets.APPLE_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.APPLE_BASE64_PWD }}
+        run: |
+          P12_BASE64='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'
+          CERT_PASSWORD=GfYEINmEy5dHfb
+
+          echo "$P12_BASE64" | base64 --decode > DeveloperID.p12
+          security create-keychain -p "" build.keychain
+          security set-keychain-settings build.keychain
+          security unlock-keychain -p "" build.keychain
+          cat DeveloperID.p12
+          security import DeveloperID.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -d user -s build.keychain
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          rm DeveloperID.p12
 
       - name: Checkout postgresql source code (MacOS)
         if: ${{ startsWith(matrix.id, 'macos-') }}
@@ -319,8 +340,13 @@ jobs:
           make $([ $major_version -ge 15 ] && echo "install-world-bin" || echo "install")
           make -C contrib install
 
+          echo "$(brew --prefix openssl)"
+          ls "$(brew --prefix openssl)"
+          ls "$(brew --prefix openssl)/lib"
+
           cp "$SOURCE_DIRECTORY/COPYRIGHT" "$INSTALL_DIRECTORY"
-          cp "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib"
+          cp "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib" || true
+          cp "$(brew --prefix openssl)/lib/openssl/lib/libssl.3.dylib" "$(brew --prefix openssl)/lib/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib" || true
           cd "$ROOT_DIRECTORY"
 
       # This allows the MacOS build to be relocated to a different directory
@@ -328,12 +354,28 @@ jobs:
         if: ${{ startsWith(matrix.id, 'macos-') }}
         env:
           BREW_OPT_DIR: ${{env.BREW_OPT_DIR}}
+          P12_BASE64: ${{ secrets.APPLE_DEV_ID_P12_BASE64 }}
+          CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
         run: |
           find $INSTALL_DIRECTORY/bin -type f | xargs -L 1 install_name_tool -change $INSTALL_DIRECTORY/lib/libpq.5.dylib '@executable_path/../lib/libpq.5.dylib'
           find $INSTALL_DIRECTORY/bin -type f | while read binary; do
-            install_name_tool -change "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
-            install_name_tool -change "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
+            install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
+            install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
           done
+
+
+          install_name_tool -add_rpath "@loader_path/../lib" $INSTALL_DIRECTORY/bin/postgres
+          install_name_tool -id "@rpath/libssl.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib
+          install_name_tool -id "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libcrypto.3.dylib
+          install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib"
+          install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib"
+
+          codesign --force --sign "$INSTALL_DIRECTORY/lib/libcrypto.3.dylib"
+          echo 8
+          codesign --force --sign "$INSTALL_DIRECTORY/lib/libssl.3.dylib"
+          echo 9
 
       #
       # Windows
