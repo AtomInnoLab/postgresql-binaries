@@ -19,29 +19,29 @@ jobs:
       fail-fast: false
       matrix:
         id:
-          - linux-arm64
-          - linux-arm64-musl
-          - linux-arm
-          - linux-arm-musl
-          - linux-armhf
-          - linux-armhf-musl
-          - linux-armv5te
-          - linux-armv7l
-          - linux-armv7l-musl
-          - linux-x64
-          - linux-x64-musl
-          - linux-x86
-          - linux-x86-musl
-          - linux-i586
-          - linux-i586-musl
-          - linux-mips64le
-          - linux-powerpc64el
-          - linux-powerpc64el-musl
-          - linux-s390x
-          - linux-s390x-musl
+          # - linux-arm64
+          # - linux-arm64-musl
+          # - linux-arm
+          # - linux-arm-musl
+          # - linux-armhf
+          # - linux-armhf-musl
+          # - linux-armv5te
+          # - linux-armv7l
+          # - linux-armv7l-musl
+          # - linux-x64
+          # - linux-x64-musl
+          # - linux-x86
+          # - linux-x86-musl
+          # - linux-i586
+          # - linux-i586-musl
+          # - linux-mips64le
+          # - linux-powerpc64el
+          # - linux-powerpc64el-musl
+          # - linux-s390x
+          # - linux-s390x-musl
           - macos-arm64
-          - macos-x64
-          - windows-x64
+          # - macos-x64
+          # - windows-x64
 
         include:
           # When adding a new target, define a new id above
@@ -50,125 +50,125 @@ jobs:
           # Linux
           #
 
-          - id: linux-arm64
-            target: aarch64-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/arm64/v8
-            architecture: "AArch64"
+          # - id: linux-arm64
+          #   target: aarch64-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/arm64/v8
+          #   architecture: "AArch64"
 
-          - id: linux-arm64-musl
-            target: aarch64-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/arm64/v8
-            architecture: "AArch64"
+          # - id: linux-arm64-musl
+          #   target: aarch64-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/arm64/v8
+          #   architecture: "AArch64"
 
-          - id: linux-arm
-            target: arm-unknown-linux-gnueabi
-            os: ubuntu-latest
-            platform: linux/arm/v6
-            architecture: "ARM"
+          # - id: linux-arm
+          #   target: arm-unknown-linux-gnueabi
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v6
+          #   architecture: "ARM"
 
-          - id: linux-arm-musl
-            target: arm-unknown-linux-musleabi
-            os: ubuntu-latest
-            platform: linux/arm/v6
-            architecture: "ARM"
+          # - id: linux-arm-musl
+          #   target: arm-unknown-linux-musleabi
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v6
+          #   architecture: "ARM"
 
-          - id: linux-armhf
-            target: arm-unknown-linux-gnueabihf
-            os: ubuntu-latest
-            platform: linux/arm/v7
-            architecture: "ARM"
+          # - id: linux-armhf
+          #   target: arm-unknown-linux-gnueabihf
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v7
+          #   architecture: "ARM"
 
-          - id: linux-armhf-musl
-            target: arm-unknown-linux-musleabihf
-            os: ubuntu-latest
-            platform: linux/arm/v7
-            architecture: "ARM"
+          # - id: linux-armhf-musl
+          #   target: arm-unknown-linux-musleabihf
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v7
+          #   architecture: "ARM"
 
-          - id: linux-armv5te
-            target: armv5te-unknown-linux-gnueabi
-            os: ubuntu-latest
-            platform: linux/arm/v5
-            architecture: "ARM"
+          # - id: linux-armv5te
+          #   target: armv5te-unknown-linux-gnueabi
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v5
+          #   architecture: "ARM"
 
-          - id: linux-armv7l
-            target: armv7-unknown-linux-gnueabihf
-            os: ubuntu-latest
-            platform: linux/arm/v7
-            architecture: "ARM"
+          # - id: linux-armv7l
+          #   target: armv7-unknown-linux-gnueabihf
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v7
+          #   architecture: "ARM"
 
-          - id: linux-armv7l-musl
-            target: armv7-unknown-linux-musleabihf
-            os: ubuntu-latest
-            platform: linux/arm/v7
-            architecture: "ARM"
+          # - id: linux-armv7l-musl
+          #   target: armv7-unknown-linux-musleabihf
+          #   os: ubuntu-latest
+          #   platform: linux/arm/v7
+          #   architecture: "ARM"
 
-          - id: linux-x64
-            target: x86_64-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/amd64
-            architecture: "Advanced Micro Devices X86-64"
+          # - id: linux-x64
+          #   target: x86_64-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/amd64
+          #   architecture: "Advanced Micro Devices X86-64"
 
-          - id: linux-x64-musl
-            target: x86_64-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/amd64
-            architecture: "Advanced Micro Devices X86-64"
+          # - id: linux-x64-musl
+          #   target: x86_64-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/amd64
+          #   architecture: "Advanced Micro Devices X86-64"
 
-          - id: linux-x86
-            target: i686-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/386
-            architecture: "Intel 80386"
+          # - id: linux-x86
+          #   target: i686-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/386
+          #   architecture: "Intel 80386"
 
-          - id: linux-x86-musl
-            target: i686-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/386
-            architecture: "Intel 80386"
+          # - id: linux-x86-musl
+          #   target: i686-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/386
+          #   architecture: "Intel 80386"
 
-          - id: linux-i586
-            target: i586-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/386
-            architecture: "Intel 80386"
+          # - id: linux-i586
+          #   target: i586-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/386
+          #   architecture: "Intel 80386"
 
-          - id: linux-i586-musl
-            target: i586-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/386
-            architecture: "Intel 80386"
+          # - id: linux-i586-musl
+          #   target: i586-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/386
+          #   architecture: "Intel 80386"
 
-          - id: linux-mips64le
-            target: mips64-unknown-linux-gnuabi64
-            os: ubuntu-latest
-            platform: linux/mips64le
-            architecture: "MIPS R3000"
+          # - id: linux-mips64le
+          #   target: mips64-unknown-linux-gnuabi64
+          #   os: ubuntu-latest
+          #   platform: linux/mips64le
+          #   architecture: "MIPS R3000"
 
-          - id: linux-powerpc64el
-            target: powerpc64le-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/ppc64le
-            architecture: "PowerPC64"
+          # - id: linux-powerpc64el
+          #   target: powerpc64le-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/ppc64le
+          #   architecture: "PowerPC64"
 
-          - id: linux-powerpc64el-musl
-            target: powerpc64le-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/ppc64le
-            architecture: "PowerPC64"
+          # - id: linux-powerpc64el-musl
+          #   target: powerpc64le-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/ppc64le
+          #   architecture: "PowerPC64"
 
-          - id: linux-s390x
-            target: s390x-unknown-linux-gnu
-            os: ubuntu-latest
-            platform: linux/s390x
-            architecture: "IBM S/390"
+          # - id: linux-s390x
+          #   target: s390x-unknown-linux-gnu
+          #   os: ubuntu-latest
+          #   platform: linux/s390x
+          #   architecture: "IBM S/390"
 
-          - id: linux-s390x-musl
-            target: s390x-unknown-linux-musl
-            os: ubuntu-latest
-            platform: linux/s390x
-            architecture: "IBM S/390"
+          # - id: linux-s390x-musl
+          #   target: s390x-unknown-linux-musl
+          #   os: ubuntu-latest
+          #   platform: linux/s390x
+          #   architecture: "IBM S/390"
 
           #
           # MacOS
@@ -179,19 +179,19 @@ jobs:
             os: macos-15
             architecture: "arm64"
 
-          - id: macos-x64
-            target: x86_64-apple-darwin
-            os: macos-13
-            architecture: "x86_64"
+          # - id: macos-x64
+          #   target: x86_64-apple-darwin
+          #   os: macos-13
+          #   architecture: "x86_64"
 
           #
           # Windows
           #
 
-          - id: windows-x64
-            target: x86_64-pc-windows-msvc
-            os: windows-latest
-            architecture: "x86-64"
+          # - id: windows-x64
+          #   target: x86_64-pc-windows-msvc
+          #   os: windows-latest
+          #   architecture: "x86-64"
 
     defaults:
       run:
@@ -346,7 +346,7 @@ jobs:
 
           cp "$SOURCE_DIRECTORY/COPYRIGHT" "$INSTALL_DIRECTORY"
           cp "$BREW_OPT_DIR/openssl/lib/libssl.3.dylib" "$BREW_OPT_DIR/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib" || true
-          cp "$(brew --prefix openssl)/lib/openssl/lib/libssl.3.dylib" "$(brew --prefix openssl)/lib/openssl/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib" || true
+          cp "$(brew --prefix openssl)/lib/libssl.3.dylib" "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "$INSTALL_DIRECTORY/lib" || true
           cd "$ROOT_DIRECTORY"
 
       # This allows the MacOS build to be relocated to a different directory
@@ -357,6 +357,7 @@ jobs:
           P12_BASE64: ${{ secrets.APPLE_DEV_ID_P12_BASE64 }}
           CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
         run: |
+          set +x
           find $INSTALL_DIRECTORY/bin -type f | xargs -L 1 install_name_tool -change $INSTALL_DIRECTORY/lib/libpq.5.dylib '@executable_path/../lib/libpq.5.dylib'
 
           find $INSTALL_DIRECTORY/bin -type f | while read binary; do
