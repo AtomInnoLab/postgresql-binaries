@@ -358,13 +358,20 @@ jobs:
           CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
         run: |
           find $INSTALL_DIRECTORY/bin -type f | xargs -L 1 install_name_tool -change $INSTALL_DIRECTORY/lib/libpq.5.dylib '@executable_path/../lib/libpq.5.dylib'
+
           find $INSTALL_DIRECTORY/bin -type f | while read binary; do
-            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
-            install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary"
-            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
-            install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary"
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
+            install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
+            install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
           done
 
+          find $INSTALL_DIRECTORY/lib -type f | while read binary; do
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
+            install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
+            install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
+            install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
+          done
 
           install_name_tool -add_rpath "@loader_path/../lib" $INSTALL_DIRECTORY/bin/postgres
           install_name_tool -id "@rpath/libssl.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib
@@ -373,9 +380,7 @@ jobs:
           install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib"
 
           codesign --force --sign "$INSTALL_DIRECTORY/lib/libcrypto.3.dylib"
-          echo 8
           codesign --force --sign "$INSTALL_DIRECTORY/lib/libssl.3.dylib"
-          echo 9
 
       #
       # Windows
