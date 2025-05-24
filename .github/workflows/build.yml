@@ -366,7 +366,8 @@ jobs:
             install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
           done
 
-          find $INSTALL_DIRECTORY/lib -type f | while read binary; do
+          # 替换所有动态库以来openssl的，排除掉两个openssl库，在下面单独处理
+          find "$INSTALL_DIRECTORY/lib" -type f -name "*.dylib" ! -name "libssl.3.dylib" ! -name "libcrypto.3.dylib" | while read binary; do
             install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
             install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@executable_path/../lib/libssl.3.dylib" "$binary" || true
             install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@executable_path/../lib/libcrypto.3.dylib" "$binary" || true
