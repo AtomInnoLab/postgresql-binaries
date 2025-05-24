@@ -376,13 +376,17 @@ jobs:
           done
 
           install_name_tool -add_rpath "@loader_path/../lib" $INSTALL_DIRECTORY/bin/postgres
+
           install_name_tool -id "@rpath/libssl.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib
           install_name_tool -id "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libcrypto.3.dylib
-          install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libssl.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib"
-          install_name_tool -change "$(brew --prefix openssl)/lib/libssl.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib"
 
-          codesign --force --sign "$INSTALL_DIRECTORY/lib/libcrypto.3.dylib"
-          codesign --force --sign "$INSTALL_DIRECTORY/lib/libssl.3.dylib"
+          install_name_tool -change "$BREW_OPT_DIR/openssl@3/lib/libcrypto.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib
+          install_name_tool -change "$(brew --prefix openssl)/lib/libcrypto.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib
+          install_name_tool -change "/opt/homebrew/Cellar/openssl@3/3.5.0/lib/libcrypto.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib || true
+          install_name_tool -change "/usr/local/Cellar/openssl@3/3.5.0/lib/libcrypto.3.dylib" "@rpath/libcrypto.3.dylib" $INSTALL_DIRECTORY/lib/libssl.3.dylib || true
+
+          codesign --force --sign - "$INSTALL_DIRECTORY/lib/libcrypto.3.dylib"
+          codesign --force --sign - "$INSTALL_DIRECTORY/lib/libssl.3.dylib"
 
       #
       # Windows
